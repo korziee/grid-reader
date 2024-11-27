@@ -12,16 +12,15 @@ import (
 	"runtime"
 )
 
-// points are the first non-boundary coord, i.e. topLeft will be the value of the first
-// white pixel directly underneath of the top boundary, and directly to the right of the left boundary
 type Grid struct {
 	img                    *GridImage
 	boundaries             image.Rectangle
 	separatorThickness     int
-	cellLength             int
+	cellWidth              int
 	placeholderComparisons []*GridImage
 	digitComparisons       []*GridImage
 
+	Name  string
 	Cells [9][9]*Cell
 }
 
@@ -32,10 +31,10 @@ func pixelMeetsThreshold(c color.Color) bool {
 	return r < threshold && g < threshold && b < threshold
 }
 
+// identifies the grid boundaries, cell length and separator thickness
 func (g *Grid) SplitCells(cellMode Mode) error {
 	midX := g.img.Bounds().Dx() / 2
 
-	// identifies the grid boundaries, cell length and separator thickness
 	for y := 0; y < g.img.Bounds().Dy(); y += 1 {
 		if !pixelMeetsThreshold(g.img.At(midX, y)) {
 			continue
@@ -71,8 +70,11 @@ func (g *Grid) SplitCells(cellMode Mode) error {
 		}
 
 		if topRight.Sub(topLeft).X < 500 {
-			// need to keep looking downwards
-			fmt.Println("Not a good top line candidate, was under 500px")
+			Logger.Debug(
+				"not a good top line candidate, expected over 500px",
+				"length", topRight.Sub(topLeft).X,
+				"y-level", y,
+			)
 			continue
 		}
 
@@ -101,7 +103,7 @@ func (g *Grid) SplitCells(cellMode Mode) error {
 			return fmt.Errorf("found a large separator thickness, expected less than 50px")
 		}
 
-		g.cellLength =
+		g.cellWidth =
 			(topRight.X -
 				topLeft.X -
 				// *4 cause theres the two sides + the two middle dividers.
@@ -133,8 +135,8 @@ func (g *Grid) SplitCells(cellMode Mode) error {
 				yPos+2,
 
 				// - 2 to compensate for operation above
-				xPos+g.cellLength-2,
-				yPos+g.cellLength-2,
+				xPos+g.cellWidth-2,
+				yPos+g.cellWidth-2,
 			)
 
 			rowCells[col] = NewCellFromGridImage(
@@ -144,7 +146,7 @@ func (g *Grid) SplitCells(cellMode Mode) error {
 				cellMode,
 			)
 
-			xPos += g.cellLength
+			xPos += g.cellWidth
 			// set offset
 			switch col {
 			// on the 3th and 6th increase by the entire separator thickness
@@ -160,7 +162,7 @@ func (g *Grid) SplitCells(cellMode Mode) error {
 
 		g.Cells[row] = rowCells
 
-		yPos += g.cellLength
+		yPos += g.cellWidth
 		// set row offset
 		switch row {
 		// on the 3th and 6th increase by the entire separator thickness
@@ -286,12 +288,13 @@ func loadDigitComparisons() []*GridImage {
 	return digitComparisons
 }
 
-func GridFromImage(img image.Image) *Grid {
+func GridFromImage(img image.Image, name string) *Grid {
 	placeholderComparisons := loadPlaceholderComparisons()
 	digitComparisons := loadDigitComparisons()
 	return &Grid{
 		img:                    NewGridImage(img, "grid"),
 		placeholderComparisons: placeholderComparisons,
 		digitComparisons:       digitComparisons,
+		Name:                   name,
 	}
 }

@@ -79,7 +79,7 @@ func TestGrid_Process_NYT_OCR(t *testing.T) {
 		return
 	}
 
-	g := GridFromImage(img)
+	g := GridFromImage(img, "TestGrid_Process_NYT_OCR")
 	err = g.SplitCells(ModeOCR)
 	if err != nil {
 		t.Error(err)
@@ -198,7 +198,7 @@ func TestGrid_Process_NYT_Comparison(t *testing.T) {
 		t.Run(fmt.Sprintf("grid_%d", idx+1), func(tt *testing.T) {
 
 			tt.Run("digits", func(ttt *testing.T) {
-				g := GridFromImage(img)
+				g := GridFromImage(img, fmt.Sprintf("TestGrid_Process_NYT_Comparison_%d", idx+1))
 				if err := g.SplitCells(ModeComparison); err != nil {
 					t.Error(err)
 				}
@@ -222,7 +222,7 @@ func TestGrid_Process_NYT_Comparison(t *testing.T) {
 			})
 
 			tt.Run("placeholders", func(ttt *testing.T) {
-				g := GridFromImage(img)
+				g := GridFromImage(img, fmt.Sprintf("TestGrid_Process_NYT_Comparison_%d", idx+1))
 				if err := g.SplitCells(ModeComparison); err != nil {
 					t.Error(err)
 				}
@@ -248,7 +248,7 @@ func TestGrid_Process_NYT_Comparison(t *testing.T) {
 			tt.Run("entire grid workers", func(ttt *testing.T) {
 				worker := NewGridWorker()
 				worker.Start()
-				g := GridFromImage(img)
+				g := GridFromImage(img, fmt.Sprintf("TestGrid_Process_NYT_Comparison_%d", idx+1))
 				if err := g.SplitCells(ModeComparison); err != nil {
 					t.Error(err)
 				}

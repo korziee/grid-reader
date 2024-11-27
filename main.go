@@ -12,6 +12,7 @@ func main() {
 		log.Fatal("error loading .env file")
 	}
 
+	internal.LoadLogger()
 	server := internal.NewSudokuServer()
 	server.Start()
 }

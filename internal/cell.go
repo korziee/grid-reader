@@ -81,9 +81,14 @@ func (c *Cell) ProcessValues(representations []*GridImage) error {
 		resolution := r.wand.GetImageWidth() * r.wand.GetImageHeight()
 		distortionPercentage := distortion / float64(resolution) * 100
 
+		Logger.Debug(
+			"calculating value distortion percentage",
+			"cell", c.Identifier,
+			"comparison_val", repIdx+1,
+			"distortion_percentage", distortionPercentage,
+		)
+
 		if distortionPercentage < 5 {
-			// TODO: implement a logger
-			// fmt.Printf("cell: %s, rep value: %d, distortion%%: %f\n", c.Identifier, repIdx+1, distortionPercentage)
 			c.comparisonValue = repIdx + 1
 			break
 		}
@@ -129,6 +134,13 @@ func (c *Cell) ProcessPlaceholders(representations []*GridImage) error {
 				_, distortion := cropped.wand.CompareImages(r.wand, imagick.METRIC_ABSOLUTE_ERROR)
 				resolution := r.wand.GetImageWidth() * r.wand.GetImageHeight()
 				distortionPercentage := distortion / float64(resolution) * 100
+
+				Logger.Debug(
+					"calculating placeholder distortion percentage",
+					"cell", c.Identifier,
+					"comparison_placeholder_value", repIdx+1,
+					"distortion_percentage", distortionPercentage,
+				)
 
 				// if the distortion is less than 20% then we consider it a match
 				// note: I was getting success at 5% but it failed on a "6" placeholder
