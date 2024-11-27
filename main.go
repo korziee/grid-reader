@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/joho/godotenv"
-	"github.com/korziee/spike-sudoku-parse/internal"
+	"github.com/korziee/grid-reader/internal"
 )
 
 func main() {

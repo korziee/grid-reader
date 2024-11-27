@@ -40,3 +40,5 @@ Next steps (placeholders):
    2. apply transform to each of them
 2. when iterating over cells, if no matches for digits, then further extract all nine placeholders by their well known positions
 3. for each placeholder run them through the the dictionary values for placeholders
+
+May need to run `export CGO_CFLAGS_ALLOW='-Xpreprocessor'` first before building

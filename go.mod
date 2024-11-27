@@ -1,12 +1,14 @@
-module github.com/korziee/spike-sudoku-parse
+module github.com/korziee/grid-reader
 
-go 1.22.5
+go 1.23
 
-require gopkg.in/gographics/imagick.v3 v3.7.1
+require (
+	github.com/joho/godotenv v1.5.1
+	gopkg.in/gographics/imagick.v3 v3.7.1
+)
 
 require (
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/vitali-fedulov/images4 v1.3.1 // indirect
 	gocv.io/x/gocv v0.39.0 // indirect
 )

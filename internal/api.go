@@ -106,7 +106,11 @@ func (s *SudokuServer) Start() {
 	http.HandleFunc("/read-grid", s.readGrid)
 
 	fmt.Println("listening on port 8080")
-	http.ListenAndServe("localhost:8080", nil)
+	// todo: make this localhost when not in container
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func NewSudokuServer() *SudokuServer {

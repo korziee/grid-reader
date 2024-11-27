@@ -17,3 +17,16 @@
 - `grid_worker.go` -> thread pool of cell processors, is orchestrated by the grid, calls processing methods on each cell
 - `cell.go` -> in-charge of placeholder and value identification, manages pre-processing via `grid_image.go`
 - `grid_image.go` -> low-level wrapper around `image.Image`, executes image pre-processing via ImageMagick, executes OCR via Tesseract
+
+# starting
+
+## docker
+
+- `docker build . -t grid-reader`
+- `docker run -p 8080:8080 grid-reader`
+- `curl --form file='@grids/3/grid.png' localhost:8080/read-grid`
+
+## local
+
+- you'll need imagemagick installed (https://github.com/gographics/imagick)
+- `go run main.go`
