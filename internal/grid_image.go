@@ -232,6 +232,12 @@ func (g *GridImage) DebugWrite(p string) {
 	}
 }
 
+func (g *GridImage) CropImage(rect image.Rectangle) image.Image {
+	return g.Image.(interface {
+		SubImage(r image.Rectangle) image.Image
+	}).SubImage(rect)
+}
+
 func NewGridImage(img image.Image, identifier string) *GridImage {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, img); err != nil {

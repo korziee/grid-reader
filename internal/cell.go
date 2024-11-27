@@ -112,7 +112,7 @@ func (c *Cell) ProcessPlaceholders(representations []*GridImage) error {
 			placeholderPosition := row*3 + col + 1
 
 			cropped := NewGridImage(
-				CropImage(c.image.Image, placeholderRect),
+				c.image.CropImage(placeholderRect),
 				fmt.Sprintf("%s/p%d/", c.Identifier, placeholderPosition),
 			)
 
@@ -175,12 +175,10 @@ func (c *Cell) IdentifyOCR() error {
 	return nil
 }
 
-func NewCellFromGridImage(cellBounds image.Rectangle, img image.Image, identifier string, mode Mode) *Cell {
-	cellImage := CropImage(img, cellBounds)
-
+func NewCellFromGridImage(cellBounds image.Rectangle, img *GridImage, identifier string, mode Mode) *Cell {
 	return &Cell{
 		Identifier: identifier,
-		image:      NewGridImage(cellImage, identifier),
+		image:      NewGridImage(img.CropImage(cellBounds), identifier),
 		mode:       mode,
 
 		ocrValue:        -1,

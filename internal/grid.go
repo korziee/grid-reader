@@ -139,7 +139,7 @@ func (g *Grid) SplitCells(cellMode Mode) error {
 
 			rowCells[col] = NewCellFromGridImage(
 				bounds,
-				g.img.Image,
+				g.img,
 				fmt.Sprintf("R%dC%d", row+1, col+1),
 				cellMode,
 			)
